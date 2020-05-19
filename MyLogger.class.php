@@ -1,22 +1,55 @@
 <?php
-
 class MyLogger
 {
-    public $standaardtekst1 = "INFO";
-    public $standaardtekst2 = "ERROR";
-    function log($message)
+    public function log($message, $type)
     {
-        return ("Result " . $this->standaardtekst1 . " : " . $message);
+        switch ($type) {
+            case 'INFO':
+                $this->info($message);
+                break;
+            case 'ERROR':
+                $this->error($message);
+                break;
+            case 'WARNING':
+                $this->warning($message);
+                break;
+            case 'DEBUG':
+                $this->debug($message);
+                break;
+            default:
+                echo $message;
+                break;
+        }
     }
-    function error($message)
+
+    private function logWithTime($message)
     {
-        return ("Result " . $this->standaardtekst2 . " : " .  $message);
+        echo '[' . date('H:i:s') . '] ' . $message;
+    }
+
+    public function error($message)
+    {
+        $this->logWithTime('ERROR: ' . $message . "\n");
+    }
+
+    public function info($message)
+    {
+        $this->logWithTime('INFO: ' . $message . "\n");
+    }
+
+    public function warning($message)
+    {
+        $this->logWithTime('WARNING: ' . $message . "\n");
+    }
+
+    public function debug($message)
+    {
+        $this->logWithTime('DEBUG: ' . $message . "\n");
     }
 }
-$logger = new MyLogger();
-$antwoord1 = $logger->log('hello world', 'INFO'); // Result: 'INFO: hello world'
-print_r($antwoord1 . PHP_EOL);
-$antwoord2 = $logger->error('dit is een error'); // Result: 'ERROR: dit is een error'
-print_r($antwoord2);
 
-?>
+
+$logger = new MyLogger();
+$logger->log('Hey! :)', 'INFO');
+$logger->error('This is an error!');
+$logger->warning('warning test');
